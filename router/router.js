@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {viewPosts, createPosts,updatePosts,deletePosts,addComment,voteComment,editComment,deleteComment} = require("../controllers/posts");
 const {createCommunity, readCommunity,joinCommunity} = require('../controllers/community');
 const {signup_post,login_post,update_password} = require('../controllers/user');
+
 // posts routes
 router.post('/posts/create', createPosts);
 router.get('/posts/get',viewPosts);
