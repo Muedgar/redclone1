@@ -13,15 +13,19 @@ class postCrud {
     }
     async createPost(creator,title,content,votes,comments) {
 
+        console.log(creator,title,content,votes,comments);
         try {
            await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
-            await comment.create({comments}).then(async d=>{
+            
+            await comment.create({creator,comments}).then(async d=>{
                 //console.log(d) d=comment
                 let comments = d;
-                await post.create({creator,title,content,votes,comments}).then(d=>d).catch(e=>new Error(e));
+                await post.create({creator,title,content,votes,comments}).then(p=>{
+                    return p;
+                }).catch(e=>new Error(e));
             }
             ).catch(e=>new Error(e));
-             
+            
             }).catch(e=>new Error(e));
         } catch (error) {
             throw new Error(error);

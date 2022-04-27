@@ -5,6 +5,8 @@ const postCrud = require("../models/posts/postCrud");
 const viewPosts = async (req,res) => {
     try {
         await new postCrud().getPost().then(d=> {
+            console.log("here is data");
+            console.log(d);
             res.status(200).json(d);
         }).catch(e=>new Error(e));
     } catch (error) {

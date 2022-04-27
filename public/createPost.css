@@ -1,0 +1,53 @@
+.posts-container-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#view-post {
+    width: 80vw;
+    height: 200px;
+    background-color: aquamarine;
+    overflow: hidden;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    box-shadow: 0 0 4px 4px black;
+    transition: all .3s linear;
+}
+#view-post:hover {
+    box-shadow: 0 0 2px 2px black;
+}
+.votes-container {
+    width: 20%;
+    height: 100%;
+    background-color: aqua;
+    overflow: scroll;
+}
+.post-content {
+    width: 80%;
+    height: 100%;
+    background-color: rgb(25, 29, 29);
+    color: white;
+    overflow: scroll;
+    position: relative;
+}
+
+
+#viewSinglePost {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 500vh;
+    background-color: black;
+    z-index: 2000;
+}
+#viewSinglePost button {
+    position: fixed;
+    top:0;
+    right: 20px;
+    width: 200px;
+    height: 50px;
+    border: 1px solid white;
+}
