@@ -7,6 +7,7 @@ const cors = require("cors");
 const router = require("./router/router");
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const user = require('./models/users/User');
 // initialise express
 const app = express();
 
@@ -67,6 +68,28 @@ const requireAuth = (req, res, next) => {
         res.redirect('/');
     }  
 }
+app.get('/getloggedinuser',requireAuth, (req,res)=> {
+    try {
+        const token = req.cookies.jwt;
+        jwt.verify(token,'jwt secret key123', async (err, decodedToken) => {
+            if(err) {
+                res.status(404).json({status: "resource not found"});
+                console.log(err.message);
+            }else {
+                console.log("loggin current users");
+                let currentUserId = decodedToken[Object.keys(decodedToken)[0]];
+                // email
+                await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
+                    await user.findOne({_id: currentUserId}).then(d=> {
+                    res.status(200).json({id: d._id.toString(),email: d.email});
+                })
+                });
+            }
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 app.get('/landingpage',requireAuth,(req,res)=> {
     try {
         console.log("sending landingpage");

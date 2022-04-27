@@ -64,6 +64,7 @@ const signup_post = async (req,res) => {
 
 const update_password = async (req,res) => {
     const {id,password} = req.body;
+    console.log("trying to change password",req.body);
     const salt = await bcrypt.genSalt();
     let passwordNew = await bcrypt.hash(password, salt);
     console.log(req.body,passwordNew);

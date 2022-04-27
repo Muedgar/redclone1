@@ -24,6 +24,6 @@ router.post('/auth/signup', signup_post);
 
 router.post('/auth/login', login_post);
 
-router.post('/auth/changePassword',update_password);
+router.post('/auth/changePassword',update_password); // front end not yet implemented
 
 module.exports = router;
