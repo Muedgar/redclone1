@@ -1,5 +1,5 @@
 function hideSinglePost() {
-    document.getElementById("viewSinglePost").style.display = "display";
+    document.getElementById("viewSinglePost").style.display = "none";
 }
 hideSinglePost();
 document.getElementById("viewSinglePostClose").addEventListener('click',()=> {
