@@ -17,17 +17,29 @@ async function viewPosts() {
  */   
 await axios.get("/api/posts/get").then(d=> {
     let posts = d.data;
+    let key = 0;
+    
     for(let post of posts) {
-        const {title,content,votes,comments} = post;
+        const {_id,creator,title,content,votes,comments} = post;
         
         //
-
         let votesCountDiv = document.createElement('div');
         votesCountDiv.setAttribute("class","votes-count");
-        votesCountDiv.innerHTML = votes;
+        votesCountDiv.innerHTML = votes.length;
+        votesCountDiv.setAttribute('id',`voteKey${key}`);
+        key++;
         //<div class="upvotes"><i class="fa-solid "></i></div>
         let upvotes = document.createElement('div');
         upvotes.setAttribute("class","upvotes");
+        upvotes.addEventListener('click',async()=> {
+          let voteKey = votesCountDiv.getAttribute('id');
+          console.log(voteKey);
+          await axios.get('/getloggedinuser').then(async d=>{
+            const {id} = d.data;
+            let loggedinuser = id;
+            addVote(loggedinuser,1,creator,_id,voteKey);
+        }).catch(e=>new Error(e));
+        });
         
         let iup = document.createElement('i');
         iup.setAttribute("class","fa-solid fa-angle-up");
@@ -36,6 +48,15 @@ await axios.get("/api/posts/get").then(d=> {
         //<div class="downvotes"><i class="fa-solid fa-angle-down"></i></div>
         let downvotes = document.createElement('div');
         downvotes.setAttribute("class","downvotes");
+        downvotes.addEventListener('click',async ()=> {
+          let voteKey = votesCountDiv.getAttribute('id');
+          console.log(voteKey);
+          await axios.get('/getloggedinuser').then(async d=>{
+            const {id} = d.data;
+            let loggedinuser = id;
+            addVote(loggedinuser,-1,creator,voteKey);
+        }).catch(e=>new Error(e));
+        });
         
         let idown = document.createElement('i');
         idown.setAttribute("class","fa-solid fa-angle-down");
@@ -45,10 +66,11 @@ await axios.get("/api/posts/get").then(d=> {
         let commentsCountId = document.createElement('p');
         commentsCountId.setAttribute("id","comments-count-id");
         if(comments.length==1) {
-            commentsCountId.innerHTML = `0 Comments`;
+            commentsCountId.innerHTML = `0 <i class="fa-solid fa-comment"></i>`;
         }else if(comments.length>1){
-            commentsCountId.innerHTML = `${comments.length} Comments`;
+            commentsCountId.innerHTML = `${comments.length} <i class="fa-solid fa-comment"></i>`;
         }
+        
         
 
         //<div class="post-comments">

@@ -12,6 +12,7 @@ document.getElementById("adminForm").addEventListener('submit',async e=> {
             let password = password1;
            await axios.post('/api/auth/changePassword', {id,password}).then(d=> {
                console.log("password changed!!!",d);
+               document.getElementById("modalBox").click();
            });
         });
     }

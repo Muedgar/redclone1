@@ -21,7 +21,7 @@ document.getElementById("create-post-id").addEventListener("submit",async e => {
            console.log("post created!!!",d);
            document.getElementById("create-post-title").value = "";
            document.getElementById("create-post-content").value = "";
-           window.location = '/landingpage';
+           viewPosts();
        });
     });
 })

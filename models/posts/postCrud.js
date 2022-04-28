@@ -1,4 +1,4 @@
-const {post,comment} = require("./post");
+const {post,comment,vote} = require("./post");
 const mongoose = require("mongoose");
 class postCrud {
     constructor() {};
@@ -11,25 +11,17 @@ class postCrud {
         }).catch(e=>new Error(e));
         return data;
     }
+    async getOnePost(id) {
+        let data = {};
+        await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
+           await post.find({_id: id}).then((d)=> {
+               data = d;
+           }).catch(e=>new Error(e));
+        }).catch(e=>new Error(e));
+        return data;
+    }
     async createPost(creator,title,content,votes,comments) {
-
-        console.log(creator,title,content,votes,comments);
-        try {
-           await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
-            
-            await comment.create({creator,comments}).then(async d=>{
-                //console.log(d) d=comment
-                let comments = d;
-                await post.create({creator,title,content,votes,comments}).then(p=>{
-                    return p;
-                }).catch(e=>new Error(e));
-            }
-            ).catch(e=>new Error(e));
-            
-            }).catch(e=>new Error(e));
-        } catch (error) {
-            throw new Error(error);
-        }
+// moved to front end.
 
         
     }
@@ -37,6 +29,7 @@ class postCrud {
         try {
             mongoose.connect(process.env.MONGO_URI).then(async ()=> {
                 await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
+                   // id,title, content,votes,comments
                     await post.findOneAndUpdate({_id: id},{title,content,votes,comments}).then(d=>d).catch(e=>new Error(e));
                    }).catch(e=>new Error(e));
             }).catch(e=>new Error(e));
@@ -80,22 +73,10 @@ class postCrud {
         }
     }
 
-    async addVoteToPost(id, vote) {
-        try {
-            await mongoose.connect(process.env.MONGO_URI).then(async ()=> {
-                await post.findOne({_id:id}).then(async d=> {
-                    d.votes += vote;
-                    const {title, content,votes,comments} = d;
-                    let id = d._id;
-                    await new postCrud().updatePost(id,title, content,votes,comments).then(d=> {
-                        return d;
-                    }).catch(e=>new Error(e));
-                }).catch(e=>new Error(e));
-            }).catch(e=>new Error(e));
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
+    // async addVoteToPost(id, vot,creator,postId) {
+    //     console.log(id,vot,creator);
+    //     // moved to controller.
+    // }
 
     async editComments(id1, id2, commentInput) {
         
