@@ -54,7 +54,7 @@ await axios.get("/api/posts/get").then(d=> {
           await axios.get('/getloggedinuser').then(async d=>{
             const {id} = d.data;
             let loggedinuser = id;
-            addVote(loggedinuser,-1,creator,voteKey);
+            addVote(loggedinuser,-1,creator,_id,voteKey);
         }).catch(e=>new Error(e));
         });
         
@@ -68,15 +68,27 @@ await axios.get("/api/posts/get").then(d=> {
         if(comments.length==1) {
             commentsCountId.innerHTML = `0 <i class="fa-solid fa-comment"></i>`;
         }else if(comments.length>1){
-            commentsCountId.innerHTML = `${comments.length} <i class="fa-solid fa-comment"></i>`;
+            commentsCountId.innerHTML = `${comments.length-1} <i class="fa-solid fa-comment"></i>`;
         }
         
         
 
         //<div class="post-comments">
         let postComments = document.createElement('div');
-        postComments.setAttribute('class','post-comments');
-
+        postComments.setAttribute('class','post-comments display-comments');
+        postComments.addEventListener('click',async () => {
+          /*
+          {
+    "id":"6266c12e666e38c71fa7ed8c", // post id.
+    "commentInput": "add comment",
+    "creator": "commentcreate@gmail.com" // currently logged in
+}*/
+await axios.get('/getloggedinuser').then(async d=>{
+  const {id} = d.data;
+  let loggedinuser = id;
+          createComment(_id,loggedinuser,creator);
+        })
+      })
         postComments.appendChild(commentsCountId);
 
         //<div class="votes-container">
@@ -108,9 +120,13 @@ await axios.get("/api/posts/get").then(d=> {
         postContent.appendChild(postContentP);
 
         let postContentMain = document.createElement('div');
-        postContentMain.setAttribute("class","post-content");
+        postContentMain.setAttribute("class","post-content openPostContent");
         postContentMain.appendChild(postTitle);
         postContentMain.appendChild(postContent);
+        postContentMain.addEventListener('click',()=> {
+          // decide, if the currently loggedin user, the creator of the 
+          // editPost();
+        });
         
         let viewpost = document.createElement('div');
         viewpost.setAttribute("id","view-post");

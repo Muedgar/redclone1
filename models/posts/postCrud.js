@@ -60,6 +60,7 @@ class postCrud {
                     const {title, content,votes,comments} = postsFound;
                     let id = postsFound._id;
                     await new postCrud().updatePost(id,title, content,votes,comments).then(d=> {
+                        console.log("updated post with new comments");
                         return d;
                     }).catch(e=>new Error(e));
                     }

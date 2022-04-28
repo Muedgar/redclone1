@@ -14,6 +14,19 @@ const viewPosts = async (req,res) => {
     }
 }
 
+const viewSinglePost = async (req,res) => {
+    try {
+        const {id} = req.params;
+        await new postCrud().getOnePost(id).then(d=> {
+            console.log("one post");
+            console.log(d);
+            res.status(200).json(d);
+        }).catch(e=>new Error(e));
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 const createPosts = async (req,res) => {
     try {
         const {creator,title,content,votes,comments} = req.body;
@@ -61,9 +74,10 @@ const deletePosts = async (req,res) => {
 const addComment = async(req,res) => {
     try {
         const {id,commentInput,creator} = req.body;
+        console.log("please add comment", req.body);
         await new postCrud().addCommentToPost(id,commentInput,creator).then(d=> {
             // 
-            res.status(200).json({activity: "added comment..."});
+            res.status(200).json({activity: "added comment...", d});
         }).catch(e=>new Error(e));
     } catch (error) {
         throw new Error(error);
@@ -152,4 +166,4 @@ const deleteComment = async(req,res)=> {
         throw new Error(error);
     }
 } 
-module.exports = {viewPosts, createPosts,updatePosts,deletePosts,addComment,voteComment,editComment,deleteComment};
+module.exports = {viewPosts, viewSinglePost, createPosts,updatePosts,deletePosts,addComment,voteComment,editComment,deleteComment};
